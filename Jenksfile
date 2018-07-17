@@ -1,0 +1,21 @@
+node {
+    agent {
+      dockerfile true
+    }
+
+    stage('clone repo') {
+    git 'https://github.com/ramachittala/from_docker.git'
+    }
+
+    stage('build') {
+    sh 'mvn clean package'
+    sh 'cp target/*.jar ..'
+    }
+    stage('docker_build'){
+    checkout scm
+    docker.withRegistry('http://10.219.39.124:5000', 'docker_hub')
+        def customImage = docker.build("myimage:$env.BUILD_ID") 
+        customImage.push()
+    }
+
+}
