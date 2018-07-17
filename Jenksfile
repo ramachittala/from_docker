@@ -4,6 +4,7 @@ node {
     }
 
     stage('clone repo') {
+    checkout scm
     git 'https://github.com/ramachittala/from_docker.git'
     }
 
